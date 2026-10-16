@@ -1,0 +1,19 @@
+services:
+  admin:
+    build: .
+    env_file: [.env]
+    environment: { DATA_DIR: /data }
+    volumes: ["botdata:/data"]
+    ports: ["8001:8001"]
+
+  bot:
+    profiles: ["bot"]   # запускается отдельно, когда в .env указан BOT_TOKEN
+    build: .
+    command: ["python", "-m", "app.run_bot"]
+    env_file: [.env]
+    environment: { DATA_DIR: /data }
+    volumes: ["botdata:/data"]
+    restart: unless-stopped
+
+volumes:
+  botdata:
